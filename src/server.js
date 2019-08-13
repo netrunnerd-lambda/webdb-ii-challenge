@@ -10,4 +10,6 @@ server.use(morgan('dev'));
 
 server.get('/', (req, res) => res.status(200).send("hello, noodle..."));
 
+server.use('/api', require('./routes'));
+
 module.exports = server;
