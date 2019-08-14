@@ -50,6 +50,32 @@ exports.one = async (req, res) => {
   }
 };
 
+exports.remove = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await m.remove(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: `Car ${id} does not exist.`,
+        success: false
+      });
+    }
+
+    return res.json({
+      message: `Car ${id} deleted.`,
+      success: true
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error,
+      message: "Car could not be deleted.",
+      success: false
+    });
+  }
+};
+
 exports.submit = async (req, res) => {
   let car = req.body;
   const length = Object.keys(car).length;
