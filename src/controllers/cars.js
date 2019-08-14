@@ -112,3 +112,43 @@ exports.submit = async (req, res) => {
     });
   }
 };
+
+exports.update = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let [ car ] = await m.list(id);
+
+    if (!car) {
+      return res.status(404).json({
+        message: `Car ${id} does not exist.`,
+        success: false
+      });
+    }
+
+    car = req.body;
+    const length = Object.keys(car).length;
+
+    if (!length) {
+      return res.status(400).json({
+        message: "Missing car data.",
+        success: false
+      });
+    }
+
+    car = await m.update(id, car);
+
+    if (car) {
+      return res.json({
+        car,
+        success: true
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error,
+      message: `Car ${id} could not be modified.`,
+      success: false
+    });
+  }
+};
